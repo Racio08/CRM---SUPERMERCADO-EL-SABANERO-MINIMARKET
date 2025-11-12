@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CRM Supermercado El Sabanero{% endblock %}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; }
+        nav { background: #2c3e50; color: white; padding: 1rem 2rem; }
+        nav h1 { display: inline-block; margin-right: 2rem; }
+        nav a { color: white; text-decoration: none; margin: 0 1rem; }
+        nav a:hover { text-decoration: underline; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        .card { background: white; border-radius: 8px; padding: 2rem; margin: 1rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .btn { display: inline-block; padding: 0.5rem 1rem; background: #3498db; color: white; text-decoration: none; border-radius: 4px; border: none; cursor: pointer; }
+        .btn:hover { background: #2980b9; }
+        .btn-success { background: #27ae60; }
+        .btn-success:hover { background: #229954; }
+        .messages { list-style: none; }
+        .messages li { padding: 1rem; margin: 1rem 0; border-radius: 4px; }
+        .messages .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .messages .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        table { width: 100%; border-collapse: collapse; }
+        table th, table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #ddd; }
+        table th { background: #34495e; color: white; }
+        .nivel { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; font-weight: bold; }
+        .nivel-bronce { background: #cd7f32; color: white; }
+        .nivel-plata { background: #c0c0c0; color: #333; }
+        .nivel-oro { background: #ffd700; color: #333; }
+        form { display: flex; flex-direction: column; gap: 1rem; }
+        form label { font-weight: bold; }
+        form input, form select { padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <nav>
+        <h1>🛒 CRM El Sabanero</h1>
+        <a href="{% url 'clientes:home' %}">Inicio</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'clientes:ver_puntos' %}">Mis Puntos</a>
+            <a href="{% url 'clientes:registrar_factura' %}">Registrar Factura</a>
+            <a href="{% url 'clientes:ranking' %}">Ranking</a>
+            {% if user.is_staff %}
+                <a href="{% url 'clientes:panel_admin' %}">Admin</a>
+            {% endif %}
+            <a href="{% url 'admin:logout' %}">Salir ({{ user.username }})</a>
+        {% else %}
+            <a href="{% url 'clientes:registro' %}">Registrarse</a>
+            <a href="{% url 'admin:login' %}">Iniciar Sesión</a>
+        {% endif %}
+    </nav>
+
+    <div class="container">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

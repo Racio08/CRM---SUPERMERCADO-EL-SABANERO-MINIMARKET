@@ -1,0 +1,63 @@
+{% extends 'clientes/base.html' %}
+
+{% block title %}Inicio - CRM El Sabanero{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>🛒 Bienvenido al CRM de Supermercado El Sabanero</h1>
+    <p style="margin-top: 1rem; font-size: 1.1rem;">Sistema de gestión de clientes y programa de fidelización.</p>
+    
+    {% if user.is_authenticated %}
+        <div style="margin-top: 2rem;">
+            <h2>¡Hola, {{ user.first_name|default:user.username }}!</h2>
+            <p>Accede a tus funciones desde el menú superior.</p>
+            <div style="margin-top: 1rem;">
+                <a href="{% url 'clientes:ver_puntos' %}" class="btn">Ver Mis Puntos</a>
+                <a href="{% url 'clientes:registrar_factura' %}" class="btn btn-success">Registrar Factura</a>
+            </div>
+        </div>
+    {% else %}
+        <div style="margin-top: 2rem;">
+            <h2>Características del sistema:</h2>
+            <ul style="margin: 1rem 0 1rem 2rem; line-height: 2;">
+                <li>✅ Registro de facturas y acumulación de puntos</li>
+                <li>✅ Sistema de niveles: Bronce, Plata, Oro</li>
+                <li>✅ Ranking mensual de clientes</li>
+                <li>✅ Gestión de campañas promocionales</li>
+                <li>✅ Sistema de premios y referidos</li>
+            </ul>
+            <a href="{% url 'admin:login' %}" class="btn" style="margin-top: 1rem;">Iniciar Sesión</a>
+        </div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>📊 Niveles de Cliente</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nivel</th>
+                <th>Puntos Requeridos</th>
+                <th>Beneficios</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="nivel nivel-bronce">Bronce</span></td>
+                <td>0 - 1,999 puntos</td>
+                <td>Acumulación básica de puntos</td>
+            </tr>
+            <tr>
+                <td><span class="nivel nivel-plata">Plata</span></td>
+                <td>2,000 - 4,999 puntos</td>
+                <td>Bonificaciones especiales</td>
+            </tr>
+            <tr>
+                <td><span class="nivel nivel-oro">Oro</span></td>
+                <td>5,000+ puntos</td>
+                <td>Máximos beneficios y premios exclusivos</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

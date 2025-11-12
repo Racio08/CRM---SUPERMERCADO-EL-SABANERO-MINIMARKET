@@ -1,0 +1,235 @@
+{% extends 'clientes/base.html' %}
+
+{% block title %}Registro de Cliente{% endblock %}
+
+{% block content %}
+<style>
+    .password-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+    .password-wrapper input {
+        flex: 1;
+        padding-right: 2.5rem;
+    }
+    .toggle-password {
+        position: absolute;
+        right: 10px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #7f8c8d;
+        font-size: 1.2rem;
+        padding: 0.25rem;
+        user-select: none;
+    }
+    .toggle-password:hover {
+        color: #2c3e50;
+    }
+</style>
+
+<div class="card">
+    <h1>📝 Registro de Nuevo Cliente</h1>
+    <p>Completa el formulario para unirte al programa de fidelización de El Sabanero.</p>
+    
+    <form method="post" style="margin-top: 2rem;">
+        {% csrf_token %}
+        
+        <h3 style="color: #2c3e50; margin-top: 1.5rem; border-bottom: 2px solid #3498db; padding-bottom: 0.5rem;">
+            👤 Información de Usuario
+        </h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div>
+                <label for="{{ form.username.id_for_label }}">{{ form.username.label }}*</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <small style="color: red;">{{ form.username.errors.0 }}</small>
+                {% endif %}
+            </div>
+            <div>
+                <label for="{{ form.email.id_for_label }}">{{ form.email.label }}*</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <small style="color: red;">{{ form.email.errors.0 }}</small>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div>
+                <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}*</label>
+                {{ form.first_name }}
+                {% if form.first_name.errors %}
+                    <small style="color: red;">{{ form.first_name.errors.0 }}</small>
+                {% endif %}
+            </div>
+            <div>
+                <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}*</label>
+                {{ form.last_name }}
+                {% if form.last_name.errors %}
+                    <small style="color: red;">{{ form.last_name.errors.0 }}</small>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+            <div>
+                <label for="{{ form.password.id_for_label }}">{{ form.password.label }}*</label>
+                <div class="password-wrapper">
+                    {{ form.password }}
+                    <button type="button" class="toggle-password" onclick="togglePassword('{{ form.password.id_for_label }}', this)">
+                        👁️
+                    </button>
+                </div>
+                {% if form.password.errors %}
+                    <small style="color: red;">{{ form.password.errors.0 }}</small>
+                {% endif %}
+            </div>
+            <div>
+                <label for="{{ form.password_confirm.id_for_label }}">{{ form.password_confirm.label }}*</label>
+                <div class="password-wrapper">
+                    {{ form.password_confirm }}
+                    <button type="button" class="toggle-password" onclick="togglePassword('{{ form.password_confirm.id_for_label }}', this)">
+                        👁️
+                    </button>
+                </div>
+                {% if form.password_confirm.errors %}
+                    <small style="color: red;">{{ form.password_confirm.errors.0 }}</small>
+                {% endif %}
+            </div>
+        </div>
+        
+        <h3 style="color: #2c3e50; margin-top: 1.5rem; border-bottom: 2px solid #3498db; padding-bottom: 0.5rem;">
+            🆔 Identificación
+        </h3>
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; margin-bottom: 1.5rem;">
+            <div>
+                <label for="{{ form.tipo_documento.id_for_label }}">{{ form.tipo_documento.label }}*</label>
+                {{ form.tipo_documento }}
+            </div>
+            <div>
+                <label for="{{ form.numero_documento.id_for_label }}">{{ form.numero_documento.label }}*</label>
+                {{ form.numero_documento }}
+                {% if form.numero_documento.errors %}
+                    <small style="color: red;">{{ form.numero_documento.errors.0 }}</small>
+                {% endif %}
+            </div>
+        </div>
+        
+        <h3 style="color: #2c3e50; margin-top: 1.5rem; border-bottom: 2px solid #3498db; padding-bottom: 0.5rem;">
+            📅 Información Personal
+        </h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+            <div>
+                <label for="{{ form.fecha_nacimiento.id_for_label }}">{{ form.fecha_nacimiento.label }}</label>
+                {{ form.fecha_nacimiento }}
+            </div>
+            <div>
+                <label for="{{ form.genero.id_for_label }}">{{ form.genero.label }}</label>
+                {{ form.genero }}
+            </div>
+        </div>
+        
+        <h3 style="color: #2c3e50; margin-top: 1.5rem; border-bottom: 2px solid #3498db; padding-bottom: 0.5rem;">
+            📞 Contacto
+        </h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div>
+                <label for="{{ form.telefono.id_for_label }}">{{ form.telefono.label }}*</label>
+                {{ form.telefono }}
+            </div>
+            <div>
+                <label for="{{ form.telefono_alternativo.id_for_label }}">{{ form.telefono_alternativo.label }}</label>
+                {{ form.telefono_alternativo }}
+            </div>
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+            <label for="{{ form.email_alternativo.id_for_label }}">{{ form.email_alternativo.label }}</label>
+            {{ form.email_alternativo }}
+        </div>
+        
+        <h3 style="color: #2c3e50; margin-top: 1.5rem; border-bottom: 2px solid #3498db; padding-bottom: 0.5rem;">
+            📍 Dirección
+        </h3>
+        <div style="margin-bottom: 1rem;">
+            <label for="{{ form.direccion.id_for_label }}">{{ form.direccion.label }}*</label>
+            {{ form.direccion }}
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div>
+                <label for="{{ form.barrio.id_for_label }}">{{ form.barrio.label }}</label>
+                {{ form.barrio }}
+            </div>
+            <div>
+                <label for="{{ form.ciudad.id_for_label }}">{{ form.ciudad.label }}*</label>
+                {{ form.ciudad }}
+            </div>
+            <div>
+                <label for="{{ form.departamento.id_for_label }}">{{ form.departamento.label }}*</label>
+                {{ form.departamento }}
+            </div>
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+            <label for="{{ form.codigo_postal.id_for_label }}">{{ form.codigo_postal.label }}</label>
+            {{ form.codigo_postal }}
+        </div>
+        
+        <h3 style="color: #2c3e50; margin-top: 1.5rem; border-bottom: 2px solid #3498db; padding-bottom: 0.5rem;">
+            ⚙️ Preferencias
+        </h3>
+        <div style="margin-bottom: 1rem;">
+            <div style="margin: 0.5rem 0;">
+                {{ form.acepta_promociones }}
+                <label for="{{ form.acepta_promociones.id_for_label }}" style="display: inline; margin-left: 0.5rem;">
+                    Acepto recibir promociones y ofertas especiales
+                </label>
+            </div>
+            <div style="margin: 0.5rem 0;">
+                {{ form.acepta_notificaciones }}
+                <label for="{{ form.acepta_notificaciones.id_for_label }}" style="display: inline; margin-left: 0.5rem;">
+                    Acepto recibir notificaciones sobre mi cuenta
+                </label>
+            </div>
+        </div>
+        
+        {% if form.non_field_errors %}
+            <div style="background: #f8d7da; color: #721c24; padding: 1rem; border-radius: 4px; margin-bottom: 1rem;">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+        
+        <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #ddd;">
+            <button type="submit" class="btn btn-success" style="padding: 0.75rem 2rem; font-size: 1.1rem;">
+                ✅ Registrarse
+            </button>
+            <a href="{% url 'clientes:home' %}" class="btn" style="margin-left: 0.5rem; background: #95a5a6;">
+                Cancelar
+            </a>
+        </div>
+        
+        <p style="margin-top: 1rem; color: #7f8c8d;">
+            <small>Los campos marcados con * son obligatorios</small>
+        </p>
+    </form>
+</div>
+
+<div style="text-align: center; margin-top: 1rem;">
+    <p>¿Ya tienes cuenta? <a href="{% url 'admin:login' %}" style="color: #3498db;">Inicia sesión aquí</a></p>
+</div>
+
+<script>
+function togglePassword(fieldId, button) {
+    const field = document.getElementById(fieldId);
+    if (field.type === 'password') {
+        field.type = 'text';
+        button.innerHTML = '🙈';
+        button.title = 'Ocultar contraseña';
+    } else {
+        field.type = 'password';
+        button.innerHTML = '👁️';
+        button.title = 'Mostrar contraseña';
+    }
+}
+</script>
+{% endblock %}

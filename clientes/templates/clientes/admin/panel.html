@@ -1,0 +1,98 @@
+{% extends 'clientes/base.html' %}
+
+{% block title %}Panel de Administración{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>⚙️ Panel de Administración</h1>
+</div>
+
+<div class="card">
+    <h2>👥 Clientes (Top por Puntos)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Teléfono</th>
+                <th>Nivel</th>
+                <th>Puntos Totales</th>
+                <th>Fecha Registro</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cliente in clientes %}
+            <tr>
+                <td><strong>{{ cliente.user.username }}</strong></td>
+                <td>{{ cliente.telefono }}</td>
+                <td><span class="nivel nivel-{{ cliente.nivel|lower }}">{{ cliente.nivel }}</span></td>
+                <td>{{ cliente.puntos|default:0 }}</td>
+                <td>{{ cliente.fecha_registro|date:"d/m/Y" }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" style="text-align: center;">No hay clientes registrados</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h2>🧾 Últimas Facturas</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Número</th>
+                <th>Cliente</th>
+                <th>Fecha</th>
+                <th>Valor</th>
+                <th>Sucursal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for factura in facturas %}
+            <tr>
+                <td>{{ factura.numero_factura }}</td>
+                <td>{{ factura.cliente.user.username }}</td>
+                <td>{{ factura.fecha_compra|date:"d/m/Y" }}</td>
+                <td>${{ factura.valor_total|floatformat:2 }}</td>
+                <td>{{ factura.sucursal }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" style="text-align: center;">No hay facturas registradas</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h2>🎯 Campañas Activas</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Multiplicador</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for campana in campanas %}
+            <tr>
+                <td><strong>{{ campana.nombre }}</strong></td>
+                <td>{{ campana.descripcion|truncatewords:10 }}</td>
+                <td>{{ campana.fecha_inicio|date:"d/m/Y" }}</td>
+                <td>{{ campana.fecha_fin|date:"d/m/Y" }}</td>
+                <td>x{{ campana.multiplicador_puntos }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" style="text-align: center;">No hay campañas configuradas</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div style="margin-top: 1rem;">
+    <a href="{% url 'admin:index' %}" class="btn btn-success">Ir al Admin de Django</a>
+    <a href="{% url 'clientes:home' %}" class="btn">Volver al Inicio</a>
+</div>
+{% endblock %}

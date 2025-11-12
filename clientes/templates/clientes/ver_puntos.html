@@ -1,0 +1,79 @@
+{% extends 'clientes/base.html' %}
+
+{% block title %}Mis Puntos{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>⭐ Mis Puntos Acumulados</h1>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 2rem 0;">
+        <div style="background: #3498db; color: white; padding: 1.5rem; border-radius: 8px; text-align: center;">
+            <h3 style="font-size: 2.5rem;">{{ total_puntos }}</h3>
+            <p>Puntos Totales</p>
+        </div>
+        <div style="background: #2c3e50; color: white; padding: 1.5rem; border-radius: 8px; text-align: center;">
+            <h3 style="font-size: 2rem;">
+                <span class="nivel nivel-{{ nivel|lower }}">{{ nivel }}</span>
+            </h3>
+            <p style="margin-top: 0.5rem;">Nivel Actual</p>
+        </div>
+    </div>
+</div>
+
+{% if historial %}
+<div class="card">
+    <h2>📋 Historial Reciente</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Tipo</th>
+                <th>Puntos</th>
+                <th>Factura</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for punto in historial %}
+            <tr>
+                <td>{{ punto.fecha_obtencion|date:"d/m/Y H:i" }}</td>
+                <td>{{ punto.tipo }}</td>
+                <td><strong>+{{ punto.puntos_obtenidos }}</strong></td>
+                <td>{% if punto.factura %}{{ punto.factura.numero_factura }}{% else %}-{% endif %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+{% if premios %}
+<div class="card">
+    <h2>🎁 Mis Premios</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Premio</th>
+                <th>Puntos Requeridos</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for premio in premios %}
+            <tr>
+                <td>{{ premio.descripcion }}</td>
+                <td>{{ premio.puntos_requeridos }}</td>
+                <td>{{ premio.fecha_otorgado|date:"d/m/Y" }}</td>
+                <td>{% if premio.entregado %}✅ Entregado{% else %}⏳ Pendiente{% endif %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<div style="margin-top: 1rem;">
+    <a href="{% url 'clientes:registrar_factura' %}" class="btn btn-success">Registrar Nueva Factura</a>
+    <a href="{% url 'clientes:ranking' %}" class="btn">Ver Ranking</a>
+</div>
+{% endblock %}
