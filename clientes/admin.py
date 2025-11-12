@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cliente, Factura, Punto, Campana, Premio, Referido
+from .models import Cliente, Factura, Punto, Campana, Premio, Referido, CatalogoPremio
 
 @admin.register(Cliente)
 class ClienteAdmin(admin.ModelAdmin):
@@ -26,6 +26,9 @@ class ClienteAdmin(admin.ModelAdmin):
         }),
         ('CRM', {
             'fields': ('nivel', 'activo', 'fecha_registro')
+        }),
+        ('Referidos', {
+            'fields': ('codigo_referido', 'referido_por')
         }),
         ('Preferencias', {
             'fields': ('acepta_promociones', 'acepta_notificaciones')
@@ -71,3 +74,11 @@ class ReferidoAdmin(admin.ModelAdmin):
     list_display = ('cliente', 'referido', 'fecha_referencia', 'puntos_otorgados')
     list_filter = ('fecha_referencia',)
     search_fields = ('cliente__user__username', 'referido__user__username')
+
+@admin.register(CatalogoPremio)
+class CatalogoPremioAdmin(admin.ModelAdmin):
+    list_display = ('nombre', 'puntos_requeridos', 'disponible', 'stock')
+    list_filter = ('disponible', 'puntos_requeridos')
+    search_fields = ('nombre', 'descripcion')
+    list_editable = ('disponible', 'stock')
+    ordering = ('puntos_requeridos',)

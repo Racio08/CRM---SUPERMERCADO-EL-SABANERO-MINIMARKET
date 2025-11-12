@@ -49,8 +49,12 @@ class Cliente(models.Model):
     acepta_promociones = models.BooleanField(default=True)
     acepta_notificaciones = models.BooleanField(default=True)
     
-    # Notas internas
-    notas = models.TextField(blank=True, help_text="Notas internas sobre el cliente")
+    # Sistema de Referidos
+    codigo_referido = models.CharField(max_length=10, unique=True, blank=True, null=True)
+    referido_por = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='mis_referidos')
+    
+    # Notas adicionales
+    notas = models.TextField(blank=True)
 
     class Meta:
         ordering = ['-fecha_registro']
@@ -99,8 +103,25 @@ class Campana(models.Model):
     def __str__(self):
         return self.nombre
 
+class CatalogoPremio(models.Model):
+    nombre = models.CharField(max_length=150)
+    descripcion = models.TextField()
+    puntos_requeridos = models.IntegerField()
+    disponible = models.BooleanField(default=True)
+    imagen_url = models.URLField(blank=True)
+    stock = models.IntegerField(default=999)
+    
+    class Meta:
+        ordering = ['puntos_requeridos']
+        verbose_name = 'Catálogo de Premio'
+        verbose_name_plural = 'Catálogo de Premios'
+    
+    def __str__(self):
+        return f"{self.nombre} ({self.puntos_requeridos} puntos)"
+
 class Premio(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    catalogo_premio = models.ForeignKey(CatalogoPremio, on_delete=models.SET_NULL, null=True, blank=True)
     descripcion = models.CharField(max_length=255)
     puntos_requeridos = models.IntegerField()
     fecha_otorgado = models.DateField(auto_now_add=True)

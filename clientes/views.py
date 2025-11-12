@@ -4,7 +4,7 @@ from django.db.models import Sum, Count
 from django.utils.timezone import now
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from .models import Cliente, Factura, Punto, Campana, Premio
+from .models import Cliente, Factura, Punto, Campana, Premio, CatalogoPremio, Referido
 from .utils import calcular_nivel
 from .forms import ClienteRegistroForm
 
@@ -144,3 +144,57 @@ def salir(request):
     logout(request)
     messages.success(request, 'Has cerrado sesión exitosamente.')
     return redirect('clientes:home')
+
+# Vista de catálogo de premios
+@login_required
+def catalogo_premios(request):
+    try:
+        cliente = request.user.cliente
+        total_puntos = Punto.objects.filter(cliente=cliente).aggregate(Sum('puntos_obtenidos'))['puntos_obtenidos__sum'] or 0
+        
+        premios = CatalogoPremio.objects.filter(disponible=True).order_by('puntos_requeridos')
+        premios_canjeados = Premio.objects.filter(cliente=cliente).order_by('-fecha_otorgado')
+        
+        return render(request, 'clientes/catalogo_premios.html', {
+            'premios': premios,
+            'total_puntos': total_puntos,
+            'premios_canjeados': premios_canjeados
+        })
+    except Cliente.DoesNotExist:
+        messages.error(request, "No tienes un perfil de cliente asociado.")
+        return redirect('clientes:home')
+
+# Vista de referidos
+@login_required
+def mis_referidos(request):
+    try:
+        cliente = request.user.cliente
+        referidos = cliente.mis_referidos.all()
+        total_referidos = referidos.count()
+        puntos_ganados = Referido.objects.filter(cliente=cliente).aggregate(Sum('puntos_otorgados'))['puntos_otorgados__sum'] or 0
+        
+        # Calcular próximo bono
+        if total_referidos < 5:
+            proximo_bono = 5
+            bono_puntos = 1000
+        elif total_referidos < 10:
+            proximo_bono = 10
+            bono_puntos = 2500
+        elif total_referidos < 20:
+            proximo_bono = 20
+            bono_puntos = 5000
+        else:
+            proximo_bono = None
+            bono_puntos = 0
+        
+        return render(request, 'clientes/mis_referidos.html', {
+            'codigo_referido': cliente.codigo_referido,
+            'referidos': referidos,
+            'total_referidos': total_referidos,
+            'puntos_ganados': puntos_ganados,
+            'proximo_bono': proximo_bono,
+            'bono_puntos': bono_puntos
+        })
+    except Cliente.DoesNotExist:
+        messages.error(request, "No tienes un perfil de cliente asociado.")
+        return redirect('clientes:home')

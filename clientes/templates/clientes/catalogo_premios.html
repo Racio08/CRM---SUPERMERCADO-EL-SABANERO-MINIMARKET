@@ -1,0 +1,134 @@
+{% extends 'clientes/base.html' %}
+
+{% block title %}Catálogo de Premios - EL SABANERO MINIMARKET{% endblock %}
+
+{% block content %}
+<div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+    <h1 style="color: white;">🎁 Catálogo de Premios</h1>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+        <p style="font-size: 1.2rem;">Canjea tus puntos por premios increíbles</p>
+        <div style="background: rgba(255,255,255,0.2); padding: 1rem 2rem; border-radius: 8px;">
+            <p style="font-size: 0.9rem; margin-bottom: 0.3rem;">Tus puntos disponibles:</p>
+            <p style="font-size: 2rem; font-weight: bold; color: #ffd700;">{{ total_puntos }}</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="color: #2c3e50; margin-bottom: 1.5rem;">🥉 Premios Nivel Bronce (500-1,900 puntos)</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+        {% for premio in premios %}
+            {% if premio.puntos_requeridos < 2000 %}
+            <div style="border: 2px solid {% if total_puntos >= premio.puntos_requeridos %}#27ae60{% else %}#ddd{% endif %}; border-radius: 8px; padding: 1.5rem; {% if total_puntos >= premio.puntos_requeridos %}background: #d4edda;{% endif %}">
+                <h3 style="color: #2c3e50; font-size: 1.3rem; margin-bottom: 0.5rem;">{{ premio.nombre }}</h3>
+                <p style="color: #555; margin-bottom: 1rem;">{{ premio.descripcion }}</p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="background: #cd7f32; color: white; padding: 0.5rem 1rem; border-radius: 20px; font-weight: bold;">
+                        {{ premio.puntos_requeridos }} puntos
+                    </span>
+                    {% if total_puntos >= premio.puntos_requeridos %}
+                        <span style="color: #27ae60; font-weight: bold;">✓ Disponible</span>
+                    {% else %}
+                        <span style="color: #95a5a6;">Faltan {{ premio.puntos_requeridos|add:"-"|add:total_puntos|cut:"-" }}</span>
+                    {% endif %}
+                </div>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #7f8c8d;">Stock: {{ premio.stock }} unidades</p>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="color: #2c3e50; margin-bottom: 1.5rem;">🥈 Premios Nivel Plata (2,000-4,900 puntos)</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+        {% for premio in premios %}
+            {% if premio.puntos_requeridos >= 2000 and premio.puntos_requeridos < 5000 %}
+            <div style="border: 2px solid {% if total_puntos >= premio.puntos_requeridos %}#27ae60{% else %}#ddd{% endif %}; border-radius: 8px; padding: 1.5rem; {% if total_puntos >= premio.puntos_requeridos %}background: #d4edda;{% endif %}">
+                <h3 style="color: #2c3e50; font-size: 1.3rem; margin-bottom: 0.5rem;">{{ premio.nombre }}</h3>
+                <p style="color: #555; margin-bottom: 1rem;">{{ premio.descripcion }}</p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="background: #c0c0c0; color: #333; padding: 0.5rem 1rem; border-radius: 20px; font-weight: bold;">
+                        {{ premio.puntos_requeridos }} puntos
+                    </span>
+                    {% if total_puntos >= premio.puntos_requeridos %}
+                        <span style="color: #27ae60; font-weight: bold;">✓ Disponible</span>
+                    {% else %}
+                        <span style="color: #95a5a6;">Faltan {{ premio.puntos_requeridos|add:total_puntos|make_list|slice:":1"|join:""|add:total_puntos|cut:total_puntos }}</span>
+                    {% endif %}
+                </div>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #7f8c8d;">Stock: {{ premio.stock }} unidades</p>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="color: #2c3e50; margin-bottom: 1.5rem;">🥇 Premios Nivel Oro (5,000+ puntos)</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+        {% for premio in premios %}
+            {% if premio.puntos_requeridos >= 5000 %}
+            <div style="border: 2px solid {% if total_puntos >= premio.puntos_requeridos %}#27ae60{% else %}#ddd{% endif %}; border-radius: 8px; padding: 1.5rem; {% if total_puntos >= premio.puntos_requeridos %}background: #d4edda;{% endif %}">
+                <h3 style="color: #2c3e50; font-size: 1.3rem; margin-bottom: 0.5rem;">{{ premio.nombre }}</h3>
+                <p style="color: #555; margin-bottom: 1rem;">{{ premio.descripcion }}</p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="background: #ffd700; color: #333; padding: 0.5rem 1rem; border-radius: 20px; font-weight: bold;">
+                        {{ premio.puntos_requeridos }} puntos
+                    </span>
+                    {% if total_puntos >= premio.puntos_requeridos %}
+                        <span style="color: #27ae60; font-weight: bold;">✓ Disponible</span>
+                    {% else %}
+                        <span style="color: #95a5a6;">Te faltan puntos</span>
+                    {% endif %}
+                </div>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #7f8c8d;">Stock: {{ premio.stock }} unidades</p>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+{% if premios_canjeados %}
+<div class="card" style="background: #f8f9fa;">
+    <h2 style="color: #2c3e50; margin-bottom: 1rem;">📦 Mis Premios Canjeados</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Premio</th>
+                <th>Puntos</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for premio in premios_canjeados %}
+            <tr>
+                <td>{{ premio.descripcion }}</td>
+                <td>{{ premio.puntos_requeridos }}</td>
+                <td>{{ premio.fecha_otorgado|date:"d/m/Y" }}</td>
+                <td>
+                    {% if premio.entregado %}
+                        <span style="color: #27ae60;">✓ Entregado</span>
+                    {% else %}
+                        <span style="color: #f39c12;">⏳ Pendiente</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<div class="card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+    <h3 style="color: white;">💡 ¿Cómo canjear premios?</h3>
+    <ol style="margin: 1rem 0 0 1.5rem; line-height: 2;">
+        <li>Acumula puntos comprando en nuestras tiendas</li>
+        <li>Contacta a nuestro personal cuando tengas los puntos necesarios</li>
+        <li>Presenta tu código de cliente</li>
+        <li>¡Recibe tu premio!</li>
+    </ol>
+    <p style="margin-top: 1rem; font-weight: bold;">📞 Contáctanos para canjear: WhatsApp 300-123-4567</p>
+</div>
+{% endblock %}

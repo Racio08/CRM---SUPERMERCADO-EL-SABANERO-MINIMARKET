@@ -1,0 +1,163 @@
+{% extends 'clientes/base.html' %}
+
+{% block title %}Mis Referidos - EL SABANERO MINIMARKET{% endblock %}
+
+{% block content %}
+<div class="card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+    <h1 style="color: white;">🔗 Programa de Referidos</h1>
+    <p style="font-size: 1.2rem; margin-top: 0.5rem;">Comparte y gana puntos con tus amigos</p>
+</div>
+
+<div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+    <h2 style="color: white; margin-bottom: 1rem;">📋 Tu Código de Referido</h2>
+    <div style="background: rgba(255,255,255,0.2); padding: 2rem; border-radius: 8px; text-align: center;">
+        <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Comparte este código con tus amigos:</p>
+        <p style="font-size: 3rem; font-weight: bold; color: #ffd700; letter-spacing: 5px;">{{ codigo_referido }}</p>
+        <button onclick="copiarCodigo()" class="btn" style="margin-top: 1rem; background: white; color: #667eea;">
+            📋 Copiar Código
+        </button>
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 0.5rem;">💰 ¿Cómo Funciona?</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+        <div style="background: #e8f5e9; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #27ae60;">
+            <h3 style="color: #27ae60; margin-bottom: 0.5rem;">1️⃣ Comparte tu código</h3>
+            <p>Invita a tus amigos a registrarse con tu código de referido.</p>
+        </div>
+        <div style="background: #fff3e0; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #f39c12;">
+            <h3 style="color: #f39c12; margin-bottom: 0.5rem;">2️⃣ Ellos se registran</h3>
+            <p>Cuando se registren usando tu código, ambos ganan puntos.</p>
+        </div>
+        <div style="background: #e3f2fd; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #3498db;">
+            <h3 style="color: #3498db; margin-bottom: 0.5rem;">3️⃣ ¡Ambos ganan!</h3>
+            <p>Tú ganas 500 puntos y tu amigo 200 puntos de bienvenida.</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 0.5rem;">🎁 Bonificaciones Especiales</h2>
+    <div style="margin-top: 1.5rem;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Referidos</th>
+                    <th>Bono Especial</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="{% if total_referidos >= 5 %}background: #d4edda;{% endif %}">
+                    <td><strong>5 referidos</strong></td>
+                    <td>+1,000 puntos EXTRA</td>
+                    <td>
+                        {% if total_referidos >= 5 %}
+                            <span style="color: #27ae60; font-weight: bold;">✓ Desbloqueado</span>
+                        {% else %}
+                            <span style="color: #95a5a6;">Faltan {{ 5|add:total_referidos|make_list|slice:":1"|join:"" }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr style="{% if total_referidos >= 10 %}background: #d4edda;{% endif %}">
+                    <td><strong>10 referidos</strong></td>
+                    <td>+2,500 puntos EXTRA</td>
+                    <td>
+                        {% if total_referidos >= 10 %}
+                            <span style="color: #27ae60; font-weight: bold;">✓ Desbloqueado</span>
+                        {% else %}
+                            <span style="color: #95a5a6;">Faltan {{ 10|add:"-"|add:total_referidos|cut:"-" }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr style="{% if total_referidos >= 20 %}background: #d4edda;{% endif %}">
+                    <td><strong>20 referidos</strong></td>
+                    <td>+5,000 puntos EXTRA</td>
+                    <td>
+                        {% if total_referidos >= 20 %}
+                            <span style="color: #27ae60; font-weight: bold;">✓ Desbloqueado</span>
+                        {% else %}
+                            <span style="color: #95a5a6;">Faltan {{ 20|add:"-"|add:total_referidos|cut:"-" }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    {% if proximo_bono %}
+    <div style="background: #fff3e0; padding: 1rem; border-radius: 8px; margin-top: 1rem; text-align: center;">
+        <p style="color: #f39c12; font-weight: bold; font-size: 1.1rem;">
+            🎯 ¡Faltan {{ proximo_bono|add:"-"|add:total_referidos|cut:"-" }} referidos para ganar {{ bono_puntos }} puntos extra!
+        </p>
+    </div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 0.5rem;">📊 Resumen de Referidos</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+        <div style="background: #e8f5e9; padding: 1.5rem; border-radius: 8px; text-align: center;">
+            <p style="font-size: 0.9rem; color: #555; margin-bottom: 0.5rem;">Total de Referidos</p>
+            <p style="font-size: 2.5rem; font-weight: bold; color: #27ae60;">{{ total_referidos }}</p>
+        </div>
+        <div style="background: #fff3e0; padding: 1.5rem; border-radius: 8px; text-align: center;">
+            <p style="font-size: 0.9rem; color: #555; margin-bottom: 0.5rem;">Puntos Ganados</p>
+            <p style="font-size: 2.5rem; font-weight: bold; color: #f39c12;">{{ puntos_ganados }}</p>
+        </div>
+    </div>
+</div>
+
+{% if referidos %}
+<div class="card">
+    <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 0.5rem;">👥 Mis Referidos</h2>
+    <table style="margin-top: 1rem;">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Nombre</th>
+                <th>Fecha de Registro</th>
+                <th>Nivel</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for referido in referidos %}
+            <tr>
+                <td>{{ referido.user.username }}</td>
+                <td>{{ referido.user.get_full_name|default:"Sin nombre" }}</td>
+                <td>{{ referido.fecha_registro|date:"d/m/Y" }}</td>
+                <td><span class="nivel nivel-{{ referido.nivel|lower }}">{{ referido.nivel }}</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card" style="text-align: center; padding: 3rem;">
+    <h3 style="color: #95a5a6; margin-bottom: 1rem;">👤 Aún no tienes referidos</h3>
+    <p style="color: #7f8c8d;">¡Comparte tu código y empieza a ganar puntos!</p>
+</div>
+{% endif %}
+
+<div class="card" style="background: #e8f5e9; border-left: 4px solid #27ae60;">
+    <h3 style="color: #27ae60;">💡 Tips para Referir</h3>
+    <ul style="margin: 1rem 0 0 1.5rem; line-height: 2; color: #555;">
+        <li>Comparte tu código en redes sociales</li>
+        <li>Cuéntale a tus familiares y amigos sobre los beneficios</li>
+        <li>Muéstrales los premios que pueden ganar</li>
+        <li>Explícales las campañas activas con multiplicadores</li>
+    </ul>
+</div>
+
+<script>
+function copiarCodigo() {
+    const codigo = '{{ codigo_referido }}';
+    navigator.clipboard.writeText(codigo).then(function() {
+        alert('✓ Código copiado: ' + codigo);
+    }, function() {
+        prompt('Copia este código:', codigo);
+    });
+}
+</script>
+{% endblock %}

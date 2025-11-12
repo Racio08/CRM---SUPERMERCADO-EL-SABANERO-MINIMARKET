@@ -11,4 +11,6 @@ urlpatterns = [
     path('mis-puntos/', views.ver_puntos, name='ver_puntos'),
     path('ranking/', views.ranking_mensual, name='ranking'),
     path('panel/', views.panel_admin, name='panel_admin'),
+    path('premios/', views.catalogo_premios, name='catalogo_premios'),
+    path('referidos/', views.mis_referidos, name='mis_referidos'),
 ]

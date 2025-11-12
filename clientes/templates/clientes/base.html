@@ -39,6 +39,8 @@
         <a href="{% url 'clientes:home' %}">Inicio</a>
         {% if user.is_authenticated %}
             <a href="{% url 'clientes:ver_puntos' %}">Mis Puntos</a>
+            <a href="{% url 'clientes:catalogo_premios' %}">🎁 Premios</a>
+            <a href="{% url 'clientes:mis_referidos' %}">🔗 Referidos</a>
             <a href="{% url 'clientes:registrar_factura' %}">Registrar Factura</a>
             <a href="{% url 'clientes:ranking' %}">Ranking</a>
             {% if user.is_staff %}
