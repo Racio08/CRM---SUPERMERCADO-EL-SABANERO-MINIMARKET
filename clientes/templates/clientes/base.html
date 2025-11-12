@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}CRM Supermercado El Sabanero{% endblock %}</title>
+    <title>{% block title %}CRM EL SABANERO MINIMARKET{% endblock %}</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Arial, sans-serif; background: #f5f5f5; }
@@ -35,7 +35,7 @@
 </head>
 <body>
     <nav>
-        <h1>🛒 CRM El Sabanero</h1>
+        <h1>🛒 EL SABANERO MINIMARKET</h1>
         <a href="{% url 'clientes:home' %}">Inicio</a>
         {% if user.is_authenticated %}
             <a href="{% url 'clientes:ver_puntos' %}">Mis Puntos</a>
@@ -44,7 +44,7 @@
             {% if user.is_staff %}
                 <a href="{% url 'clientes:panel_admin' %}">Admin</a>
             {% endif %}
-            <a href="{% url 'admin:logout' %}">Salir ({{ user.username }})</a>
+            <a href="{% url 'clientes:salir' %}">Salir ({{ user.username }})</a>
         {% else %}
             <a href="{% url 'clientes:registro' %}">Registrarse</a>
             <a href="{% url 'admin:login' %}">Iniciar Sesión</a>

@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Count
 from django.utils.timezone import now
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from .models import Cliente, Factura, Punto, Campana, Premio
 from .utils import calcular_nivel
 from .forms import ClienteRegistroForm
@@ -132,3 +132,9 @@ def registro(request):
         form = ClienteRegistroForm()
     
     return render(request, 'clientes/registro.html', {'form': form})
+
+# Vista de logout
+def salir(request):
+    logout(request)
+    messages.success(request, 'Has cerrado sesión exitosamente.')
+    return redirect('clientes:home')
