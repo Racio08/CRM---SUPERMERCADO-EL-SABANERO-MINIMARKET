@@ -101,7 +101,13 @@ def panel_admin(request):
 
 # Vista de inicio
 def home(request):
-    return render(request, 'clientes/home.html')
+    hoy = now().date()
+    campanas_activas = Campana.objects.filter(fecha_inicio__lte=hoy, fecha_fin__gte=hoy)
+    proximas_campanas = Campana.objects.filter(fecha_inicio__gt=hoy).order_by('fecha_inicio')[:3]
+    return render(request, 'clientes/home.html', {
+        'campanas_activas': campanas_activas,
+        'proximas_campanas': proximas_campanas
+    })
 
 # Vista de registro
 def registro(request):

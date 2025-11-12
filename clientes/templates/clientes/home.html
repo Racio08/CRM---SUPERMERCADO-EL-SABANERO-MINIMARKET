@@ -31,6 +31,38 @@
     {% endif %}
 </div>
 
+{% if campanas_activas %}
+<div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+    <h2 style="color: white; border-bottom: 2px solid white; padding-bottom: 0.5rem;">🎉 ¡CAMPAÑAS ACTIVAS AHORA!</h2>
+    {% for campana in campanas_activas %}
+    <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; margin: 1rem 0; border-radius: 8px; border-left: 4px solid #ffd700;">
+        <h3 style="color: #ffd700; font-size: 1.5rem; margin-bottom: 0.5rem;">{{ campana.nombre }}</h3>
+        <p style="font-size: 1.1rem; margin: 0.5rem 0;">{{ campana.descripcion }}</p>
+        <div style="display: flex; gap: 2rem; margin-top: 1rem; font-size: 0.9rem;">
+            <span>📅 Válido hasta: <strong>{{ campana.fecha_fin|date:"d/m/Y" }}</strong></span>
+            <span>⭐ Multiplicador: <strong style="color: #ffd700; font-size: 1.3rem;">x{{ campana.multiplicador_puntos }}</strong></span>
+        </div>
+    </div>
+    {% endfor %}
+    <p style="margin-top: 1rem; text-align: center; font-size: 1.1rem; font-weight: bold;">
+        💰 ¡Registra tus facturas ahora y multiplica tus puntos!
+    </p>
+</div>
+{% endif %}
+
+{% if proximas_campanas %}
+<div class="card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+    <h2 style="color: white; border-bottom: 2px solid white; padding-bottom: 0.5rem;">🔜 Próximas Campañas</h2>
+    {% for campana in proximas_campanas %}
+    <div style="background: rgba(255,255,255,0.1); padding: 1rem; margin: 0.5rem 0; border-radius: 8px;">
+        <h4 style="color: white; margin-bottom: 0.3rem;">{{ campana.nombre }}</h4>
+        <p style="font-size: 0.95rem; margin: 0.3rem 0;">{{ campana.descripcion }}</p>
+        <span style="font-size: 0.85rem;">📅 Inicia: {{ campana.fecha_inicio|date:"d/m/Y" }} | Multiplicador: x{{ campana.multiplicador_puntos }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 <div class="card">
     <h2>📊 Niveles de Cliente</h2>
     <table>
