@@ -1,0 +1,6 @@
+# CRM System Requirements
+# Database
+sqlite3
+
+# No external dependencies needed for basic version
+# All using Python standard library
