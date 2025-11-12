@@ -1,0 +1,9 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | Administración El Sabanero Minimarket{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">🛒 Administración El Sabanero Minimarket</a></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
