@@ -12,6 +12,13 @@ pip install -r requirements.txt
 python app.py
 ```
 
+Para modo de desarrollo (con debug):
+```bash
+FLASK_DEBUG=true python app.py
+```
+
+⚠️ **Importante**: No uses debug en producción por razones de seguridad.
+
 Verás un mensaje como este:
 ```
 ============================================================

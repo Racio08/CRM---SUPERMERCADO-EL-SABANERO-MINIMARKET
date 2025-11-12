@@ -441,6 +441,7 @@ def inicializar_datos_demo():
 
 
 if __name__ == '__main__':
+    import os
     app = create_app()
     print("=" * 60)
     print("CRM - SUPERMERCADO EL SABANERO MINIMARKET")
@@ -455,4 +456,8 @@ if __name__ == '__main__':
     print("  - POST /api/canje")
     print("  - GET  /api/estadisticas/general")
     print("=" * 60)
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Use debug mode only if explicitly set via environment variable
+    debug_mode = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
+    if debug_mode:
+        print("\n⚠️  WARNING: Running in DEBUG mode - do not use in production!")
+    app.run(debug=debug_mode, host='0.0.0.0', port=5000)
